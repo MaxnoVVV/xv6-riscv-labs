@@ -50,7 +50,9 @@ main:
     addi sp, sp, 4
     lw a1, 0(sp)
 
-    add a1, a0, a1 #sum
+    li a7, 22
+    ecall
+    mv a1, a0
     la a0, print_message
     call printf
     li a0, 0
