@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "procinfo.h"
 
 uint64
 sys_exit(void)
@@ -90,4 +91,13 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
+}
+
+int sys_ps_listinfo (void) {
+  uint64 plist;
+  int lim;
+
+  argaddr(0, &plist);
+  argint(1, &lim);
+  return sys_ps_listinfo_impl(plist, lim);
 }
