@@ -15,6 +15,7 @@ main(int argc, char **argv)
     sleep(50);
     exit(1);
   } else {
+    printf("parent pid=%d, child pid=%d\n", getpid(), pid);
     int status = 0;
     int w = wait(&status);
     if(w < 0){
