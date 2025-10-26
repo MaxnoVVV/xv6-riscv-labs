@@ -23,9 +23,11 @@ OBJS = \
   $K/log.o \
   $K/sleeplock.o \
   $K/file.o \
+  $K/mutex.o \
   $K/pipe.o \
   $K/exec.o \
   $K/sysfile.o \
+  $K/sysmutex.o \
   $K/kernelvec.o \
   $K/plic.o \
   $K/virtio_disk.o
@@ -139,6 +141,15 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
+<<<<<<< Updated upstream
+=======
+	$U/_task1a\
+	$U/_task1b\
+	$U/_task2\
+	$U/_task2_mutex\
+	$U/_task3_mutex\
+
+>>>>>>> Stashed changes
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

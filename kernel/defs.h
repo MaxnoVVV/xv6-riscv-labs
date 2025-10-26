@@ -34,6 +34,17 @@ int             fileread(struct file*, uint64, int n);
 int             filestat(struct file*, uint64 addr);
 int             filewrite(struct file*, uint64, int n);
 
+// mutex.c
+void            mutexinit(void);
+int             mutexalloc(struct file**);
+void            mutexclose(struct sleeplock*);
+int             mutexlock(struct sleeplock*);
+int             mutexunlock(struct sleeplock*);
+int             mutexcount(void);
+
+// sysfile.с
+int      fdalloc(struct file *f);
+
 // fs.c
 void            fsinit(int);
 int             dirlink(struct inode*, char*, uint);

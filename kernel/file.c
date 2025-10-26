@@ -23,6 +23,7 @@ void
 fileinit(void)
 {
   initlock(&ftable.lock, "ftable");
+  mutexinit();
 }
 
 // Allocate a file structure.
@@ -65,6 +66,8 @@ fileclose(struct file *f)
   if(f->ref < 1)
     panic("fileclose");
   if(--f->ref > 0){
+    if(f->type == FD_MUTEX && holdingsleep(f->mutex))
+        releasesleep(f->mutex);
     release(&ftable.lock);
     return;
   }
@@ -75,6 +78,10 @@ fileclose(struct file *f)
 
   if(ff.type == FD_PIPE){
     pipeclose(ff.pipe, ff.writable);
+  } else if(ff.type == FD_MUTEX){
+    if(ff.mutex){
+      mutexclose(ff.mutex);
+    }
   } else if(ff.type == FD_INODE || ff.type == FD_DEVICE){
     begin_op();
     iput(ff.ip);
@@ -117,6 +124,8 @@ fileread(struct file *f, uint64 addr, int n)
     if(f->major < 0 || f->major >= NDEV || !devsw[f->major].read)
       return -1;
     r = devsw[f->major].read(1, addr, n);
+  } else if(f->type == FD_MUTEX){
+    return -1;
   } else if(f->type == FD_INODE){
     ilock(f->ip);
     if((r = readi(f->ip, 1, addr, f->off, n)) > 0)
@@ -145,6 +154,8 @@ filewrite(struct file *f, uint64 addr, int n)
     if(f->major < 0 || f->major >= NDEV || !devsw[f->major].write)
       return -1;
     ret = devsw[f->major].write(1, addr, n);
+  } else if(f->type == FD_MUTEX){
+    return -1;
   } else if(f->type == FD_INODE){
     // write a few blocks at a time to avoid exceeding
     // the maximum log transaction size, including
@@ -179,4 +190,3 @@ filewrite(struct file *f, uint64 addr, int n)
 
   return ret;
 }
-
