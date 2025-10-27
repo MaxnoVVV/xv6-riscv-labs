@@ -56,9 +56,12 @@ struct {
 // user write()s to the console go here.
 //
 int
-consolewrite(int user_src, uint64 src, int n)
+consolewrite(int minor, int user_src, uint64 src, int n)
 {
   int i;
+
+  if(minor != 0)
+    return -1;
 
   for(i = 0; i < n; i++){
     char c;
@@ -77,11 +80,14 @@ consolewrite(int user_src, uint64 src, int n)
 // or kernel address.
 //
 int
-consoleread(int user_dst, uint64 dst, int n)
+consoleread(int minor, int user_dst, uint64 dst, int n)
 {
   uint target;
   int c;
   char cbuf;
+
+  if(minor != 0)
+    return -1;
 
   target = n;
   acquire(&cons.lock);
