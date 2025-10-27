@@ -21,6 +21,11 @@
 #define UART0 0x10000000L
 #define UART0_IRQ 10
 
+// qemu puts Goldfish RTC registers here in physical memory.
+#define RTC_BASE 0x101000L
+#define RTC_REG_LOW (RTC_BASE + 0x0)
+#define RTC_REG_HIGH (RTC_BASE + 0x4)
+
 // virtio mmio interface
 #define VIRTIO0 0x10001000
 #define VIRTIO0_IRQ 1

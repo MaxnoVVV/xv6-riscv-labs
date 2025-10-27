@@ -185,5 +185,10 @@ void            virtio_disk_init(void);
 void            virtio_disk_rw(struct buf *, int);
 void            virtio_disk_intr(void);
 
+// rtc.c
+uint32          rtc_read_low(void);
+uint32          rtc_read_high(void);
+uint64          rtc_read_time(void);
+
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))
